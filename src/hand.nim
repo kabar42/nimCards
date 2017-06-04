@@ -21,18 +21,18 @@ proc generateDeck*(): array[deck_size, Card] =
   result = cards
 
 type
+  HandRef = ref Hand
   Hand* = object
     cards*: seq[Card]
 
-proc newHand*(): Hand =
-  var h: Hand = Hand(cards: @[])
-  result = h
+proc newHand*(): HandRef = new(result)
 
-proc copyHand*(h: Hand): Hand =
+proc copyHand*(h: Hand): HandRef =
   var cardCopy = newSeq[Card]()
   for c in h.cards:
     cardCopy.add(c)
-  var h: Hand = Hand(cards: cardCopy)
+  var h = new(Hand)
+  h.cards = cardCopy
   result = h
 
 method isFull*(h: Hand): bool {.inline.} = h.cards.len >= hand_size
@@ -51,12 +51,12 @@ method print*(h: Hand) =
   echo output
 
 
-proc generateAllHands(deck: seq[Card], hand: Hand, all_hands: var seq[Hand]) =
-  if hand.isFull():
-    all_hands.add(hand)
+proc generateAllHands(deck: seq[Card], hand: HandRef, all_hands: var seq[Hand]) =
+  if hand[].isFull():
+    all_hands.add(hand[])
   elif deck.len > 0:
-    var new_hand = copyHand(hand)
-    new_hand.add(deck[0])
+    var new_hand: HandRef = copyHand(hand[])
+    new_hand[].add(deck[0])
     let deck_slice = deck[1..^1]
     generateAllHands(deck_slice, new_hand, all_hands)
     generateAllHands(deck_slice, hand, all_hands)
