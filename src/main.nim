@@ -5,7 +5,7 @@ let deck = generateDeck()
 #   echo $c
 
 var startHand = newHand()
-var allHands = newSeq[Hand]()
+var allHands = newSeq[HandRef]()
 
 generateAllHands(deck[0..^1], startHand, allHands)
 

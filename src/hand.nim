@@ -51,9 +51,9 @@ method print*(h: Hand) =
   echo output
 
 
-proc generateAllHands(deck: seq[Card], hand: HandRef, all_hands: var seq[Hand]) =
+proc generateAllHands(deck: seq[Card], hand: HandRef, all_hands: var seq[HandRef]) =
   if hand[].isFull():
-    all_hands.add(hand[])
+    all_hands.add(hand)
   elif deck.len > 0:
     var new_hand: HandRef = copyHand(hand[])
     new_hand[].add(deck[0])
